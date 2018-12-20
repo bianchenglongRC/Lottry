@@ -16,7 +16,8 @@
 		13B6FCC021C9EB4C00681F4A /* LuckDrawTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B6FCBF21C9EB4C00681F4A /* LuckDrawTests.m */; };
 		13B6FCCB21C9EB4C00681F4A /* LuckDrawUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B6FCCA21C9EB4C00681F4A /* LuckDrawUITests.m */; };
 		13B6FCFD21CA16C900681F4A /* LuckView.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B6FCFC21CA16C900681F4A /* LuckView.m */; };
-		13B6FD0421CA264300681F4A /* LottryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B6FD0321CA264300681F4A /* LottryCell.m */; };
+		13B6FD0421CA264300681F4A /* LottreyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B6FD0321CA264300681F4A /* LottreyCell.m */; };
+		13EA66B821CB7440003563CD /* InternetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EA66B721CB7440003563CD /* InternetRequest.m */; };
 		3738363B99863066E2981695 /* libPods-LuckDraw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C55D3DC13A5E886779DC19 /* libPods-LuckDraw.a */; };
 /* End PBXBuildFile section */
 
@@ -57,8 +58,10 @@
 		13B6FCCC21C9EB4C00681F4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		13B6FCFB21CA16C900681F4A /* LuckView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LuckView.h; sourceTree = "<group>"; };
 		13B6FCFC21CA16C900681F4A /* LuckView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LuckView.m; sourceTree = "<group>"; };
-		13B6FD0221CA264300681F4A /* LottryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LottryCell.h; sourceTree = "<group>"; };
-		13B6FD0321CA264300681F4A /* LottryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LottryCell.m; sourceTree = "<group>"; };
+		13B6FD0221CA264300681F4A /* LotteryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LotteryCell.h; sourceTree = "<group>"; };
+		13B6FD0321CA264300681F4A /* LottreyCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LottreyCell.m; sourceTree = "<group>"; };
+		13EA66B621CB7440003563CD /* InternetRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InternetRequest.h; sourceTree = "<group>"; };
+		13EA66B721CB7440003563CD /* InternetRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InternetRequest.m; sourceTree = "<group>"; };
 		651308B5CB0F30B0CC57560F /* Pods-LuckDraw.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LuckDraw.release.xcconfig"; path = "Target Support Files/Pods-LuckDraw/Pods-LuckDraw.release.xcconfig"; sourceTree = "<group>"; };
 		6E8CD984E0B19702AFCF2ED0 /* Pods-LuckDraw.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LuckDraw.debug.xcconfig"; path = "Target Support Files/Pods-LuckDraw/Pods-LuckDraw.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -114,14 +117,15 @@
 		13B6FCA521C9EB4300681F4A /* LuckDraw */ = {
 			isa = PBXGroup;
 			children = (
+				13EA66B521CB7440003563CD /* InternetRequest */,
 				13B6FCA621C9EB4300681F4A /* AppDelegate.h */,
 				13B6FCA721C9EB4300681F4A /* AppDelegate.m */,
 				13B6FCA921C9EB4300681F4A /* ViewController.h */,
 				13B6FCAA21C9EB4300681F4A /* ViewController.m */,
 				13B6FCFB21CA16C900681F4A /* LuckView.h */,
 				13B6FCFC21CA16C900681F4A /* LuckView.m */,
-				13B6FD0221CA264300681F4A /* LottryCell.h */,
-				13B6FD0321CA264300681F4A /* LottryCell.m */,
+				13B6FD0221CA264300681F4A /* LotteryCell.h */,
+				13B6FD0321CA264300681F4A /* LottreyCell.m */,
 				13B6FCAC21C9EB4300681F4A /* Main.storyboard */,
 				13B6FCAF21C9EB4B00681F4A /* Assets.xcassets */,
 				13B6FCB121C9EB4B00681F4A /* LaunchScreen.storyboard */,
@@ -147,6 +151,15 @@
 				13B6FCCC21C9EB4C00681F4A /* Info.plist */,
 			);
 			path = LuckDrawUITests;
+			sourceTree = "<group>";
+		};
+		13EA66B521CB7440003563CD /* InternetRequest */ = {
+			isa = PBXGroup;
+			children = (
+				13EA66B621CB7440003563CD /* InternetRequest.h */,
+				13EA66B721CB7440003563CD /* InternetRequest.m */,
+			);
+			path = InternetRequest;
 			sourceTree = "<group>";
 		};
 		92F2EF6051F28C5B8AA4E534 /* Frameworks */ = {
@@ -324,7 +337,8 @@
 			files = (
 				13B6FCAB21C9EB4300681F4A /* ViewController.m in Sources */,
 				13B6FCB621C9EB4B00681F4A /* main.m in Sources */,
-				13B6FD0421CA264300681F4A /* LottryCell.m in Sources */,
+				13EA66B821CB7440003563CD /* InternetRequest.m in Sources */,
+				13B6FD0421CA264300681F4A /* LottreyCell.m in Sources */,
 				13B6FCA821C9EB4300681F4A /* AppDelegate.m in Sources */,
 				13B6FCFD21CA16C900681F4A /* LuckView.m in Sources */,
 			);

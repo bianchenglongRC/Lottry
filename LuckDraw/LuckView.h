@@ -10,7 +10,21 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+typedef NS_ENUM(NSUInteger, LuckViewType) {
+    LuckView_Male = 0,
+    LuckView_Female = 1,
+};
+
 @interface LuckView : UIView
+
+
+@property (nonatomic, copy) void(^closeBtnBlock)(void);
+
+@property (nonatomic, assign) LuckViewType luckViewType;
+
+
+
 
 @end
 
