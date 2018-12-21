@@ -2,5 +2,6 @@ platform :ios, '10.0'
 target "LuckDraw" do
     pod 'Masonry', '~> 1.1.0'
     pod 'SDWebImage', '~> 3.8.2'
+    pod 'JSONModel', '~> 1.7.0'
 end
 

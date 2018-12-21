@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C96F13538C534597937BBC39B11CF93F"
+               BlueprintIdentifier = "7F7D4915CCBE33128F3E1D395B38B493"
                BlueprintName = "Pods-LuckDraw"
                ReferencedContainer = "container:Pods.xcodeproj"
                BuildableName = "libPods-LuckDraw.a">

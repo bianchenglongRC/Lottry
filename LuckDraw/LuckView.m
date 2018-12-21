@@ -175,8 +175,10 @@
     [self.ruleView setImage:[UIImage imageNamed:@"room_zp_boy_FAQ_bg"]];
     [self.luckBgImgView addSubview:self.ruleView];
     [self.ruleView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.equalTo(self.luckView);
-        make.center.equalTo(self.luckView);
+        make.width.equalTo(self.luckView).with.offset(-10);
+        make.height.equalTo(self.luckView).with.offset(-10);
+        make.centerX.equalTo(self.luckView);
+        make.top.equalTo(self.luckView).with.offset(15.f);
     }];
     self.ruleView.hidden = YES;
 
@@ -296,6 +298,7 @@
         make.width.equalTo(self.lotteryCell2).with.offset(-10);
         make.height.equalTo(@32);
     }];
+    [self.luckBgImgView layoutIfNeeded];
 }
 
 
@@ -485,7 +488,7 @@
 
 //抽奖按钮按下后的准备工作
 - (void)prepareLotteryAction {
-    intervalTime = 0.6;//起始的变换时间差（速度）
+    intervalTime = 0.7;//起始的变换时间差（速度）
 //    self.currentView.label.textColor = [UIColor colorWithRed:0.74 green:0.46 blue:0.07 alpha:1];
 //    self.currentView.image=[UIImage imageNamed:@"l3"];
 //
@@ -649,6 +652,8 @@
     self.ruleView.hidden = NO;
     self.luckView.hidden = YES;
     self.ruleBtn.hidden = YES;
+    self.ruleView.alpha = 0.f;
+    [self luckViewShowAnimation];
     [self.closeBtn setBackgroundImage:[UIImage imageNamed:@"room_zp_boy_FAQ_btn_back"] forState:UIControlStateNormal];
 
     
@@ -673,12 +678,43 @@
         }
     } else {
         [self.closeBtn setBackgroundImage:[UIImage imageNamed:@"room_zp_boy_btn_close"] forState:UIControlStateNormal];
-        self.ruleView.hidden = YES;
-        self.luckView.hidden = NO;
+//        self.ruleView.hidden = YES;
         self.ruleBtn.hidden = NO;
+        [self luckViewCloseAnimation];
     }
-
 }
+
+- (void)luckViewShowAnimation
+{
+    [self.ruleView.superview layoutIfNeeded];
+    [UIView animateWithDuration:0.5f animations:^{
+        [self.ruleView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.luckView).with.offset(5);
+        }];
+        [self.ruleView.superview layoutIfNeeded];
+        self.ruleView.alpha = 1.0;
+    } completion:^(BOOL finished) {
+    }];
+}
+
+- (void)luckViewCloseAnimation
+{
+    [self.ruleView.superview layoutIfNeeded];
+    [UIView animateWithDuration:0.3f animations:^{
+        [self.ruleView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.luckView).with.offset(15);
+        }];
+        [self.ruleView.superview layoutIfNeeded];
+        self.ruleView.alpha = 0.f;
+    } completion:^(BOOL finished) {
+        self.luckView.hidden = NO;
+        self.ruleView.hidden = YES;
+    }];
+
+    
+    
+}
+
 
 - (void)ruleBtnClickedForFemale:(id)sender
 {
