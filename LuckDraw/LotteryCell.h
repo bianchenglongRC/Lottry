@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Masonry.h"
+#import "LotteryModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,8 +31,10 @@ typedef NS_ENUM(NSUInteger, LotteryCellType) {
 
 @property (nonatomic, assign) LotteryCellType lotteryCellType;
 
+@property (nonatomic, copy) LotteryModel *lotteryInfo;
 
-- (void)setLotteryInfo:(NSDictionary *)lotteryInfo;
+
+- (void)refreshLotteryCountUI:(LotteryModel *)lotteryInfo;
 
 @end
 

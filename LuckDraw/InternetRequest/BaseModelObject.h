@@ -14,6 +14,6 @@
 //- (instancetype)initWithDictionary: (NSDictionary *) data;
 //+ (instancetype)modelWithDictionary: (NSDictionary *) data;
 
--(void) assginToPropertyWithDictionary: (NSDictionary *) data;
+-(void)assginToPropertyWithDictionary: (NSDictionary *) data;
 
 @end

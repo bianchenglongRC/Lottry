@@ -10,6 +10,7 @@
 #import "Masonry.h"
 #import "LotteryCell.h"
 #import "InternetRequest/InternetRequest.h"
+#import "LotteryModel.h"
 
 @interface LuckView()
 {
@@ -29,6 +30,8 @@
 @property (nonatomic, strong) UIImageView *luckWaitView;
 
 @property (nonatomic, strong) UIImageView *ruleView;
+@property (nonatomic, strong) UIImageView *waitingView;
+@property (nonatomic, strong) ZJCircleProgressView *waitingProgressView;
 
 @property (nonatomic, strong) LotteryCell *lotteryCell1;
 @property (nonatomic, strong) LotteryCell *lotteryCell2;
@@ -45,6 +48,20 @@
 @property (nonatomic, strong) UIButton *sheOpen;
 
 @property (nonatomic, strong) NSArray *cellArray;
+
+@property (nonatomic, strong) NSTimer *discountTimer;
+@property (nonatomic) CGFloat discount;
+@property (nonatomic) NSInteger maxcount;
+
+@property (nonatomic, strong) NSMutableArray *maleLotteryArray;
+@property (nonatomic, strong) NSMutableArray *femaleLotteryArray;
+@property (nonatomic, strong) NSMutableArray *currentLotteryArray;
+
+@property (nonatomic) BOOL isSecondTap;
+@property (nonatomic, strong) NSDate *firstDate;
+@property (nonatomic, strong) NSDate *secondDate;
+
+
 
 
 @end
@@ -74,9 +91,54 @@
     [super layoutSubviews];
 }
 
+- (void)initTestData
+{
+
+    self.maleLotteryArray = [[NSMutableArray alloc] init];
+    self.femaleLotteryArray = [[NSMutableArray alloc] init];
+    self.currentLotteryArray = [[NSMutableArray alloc] init];
+    NSArray *testLotteryInfoArr = @[@{@"id":@1,@"lotteryImage":@"http://39.107.25.202/giftbag/1524715616646516676.png",@"lotteryName":@"1",@"gold":@20},
+                                         @{@"id":@2,@"lotteryImage":@"http://39.107.25.202/giftbag/1516609030594442817.png",@"lotteryName":@"2",@"gold":@50},
+                                         @{@"id":@3,@"lotteryImage":@"http://39.107.25.202/giftbag/1516609131896703510.png",@"lotteryName":@"3",@"gold":@20},
+                                         @{@"id":@4,@"lotteryImage":@"http://39.107.25.202/giftbag/1516609277102884511.png",@"lotteryName":@"4",@"gold":@500},
+                                         @{@"id":@5,@"lotteryImage":@"http://39.107.25.202/giftbag/1516609348811958215.png",@"lotteryName":@"5",@"gold":@5000},
+                                         @{@"id":@6,@"lotteryImage":@"http://39.107.25.202/giftbag/1516791362701446796.png",@"lotteryName":@"6",@"gold":@2000},
+                                         @{@"id":@7,@"lotteryImage":@"http://39.107.25.202/giftbag/1516609451659490380.png",@"lotteryName":@"7",@"gold":@1500},
+                                         @{@"id":@8,@"lotteryImage":@"http://39.107.25.202/giftbag/1516609971957373489.png",@"lotteryName":@"8",@"gold":@200},
+                                         ];
+    
+    for (NSDictionary *testDic in testLotteryInfoArr) {
+        NSError *error;
+        LotteryModel *lotteryItem = [[LotteryModel alloc]initWithDictionary:testDic error:&error];
+        if (!error) {
+            [self.maleLotteryArray addObject:lotteryItem];
+        }
+    }
+    
+    self.currentLotteryArray =  self.maleLotteryArray;
+    
+    
+    
+//    LotteryModel *testCell = []
+    
+}
+
+
+- (void)updateMaleLuckViewUI {
+    [self.meOpen setTitle:@"OPEN" forState:UIControlStateNormal];
+    [self.meOpen.titleLabel setFont:[UIFont fontWithName:FontNameMedium size:12.f]];
+    [self.meOpen setBackgroundImage:[UIImage imageNamed:@"room_zp_boy_btn_open"] forState:UIControlStateNormal];
+    [self.meOpen setBackgroundImage:[UIImage imageNamed:@"room_zp_boy_btn_open_press"] forState:UIControlStateSelected];
+    [self.meOpen mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(@32);
+    }];
+    self.sheOpen.hidden =  NO;
+    self.isGirlAsk = NO;
+}
+
 - (void)buildUI
 {
-    
+    [self initTestData];
     if (self.luckViewType == LuckView_Male) {
         [self buildMaleLuckViewUI];
     } else {
@@ -87,17 +149,23 @@
     int count = (int)self.cellArray.count;
     for (int i=0; i<count; i++) {
         LotteryCell *view = self.cellArray[i];
+        LotteryModel *model = self.currentLotteryArray[i];
+        [view setLotteryInfo: model];
         view.tag = i;
     }
     endTimerTotal = 5.0;
 }
-
 
 - (void)buildMaleLuckViewUI {
     
     self.luckBgImgView = [[UIImageView alloc] init];
     self.luckBgImgView.userInteractionEnabled = YES;
     [self.luckBgImgView setImage: [UIImage imageNamed:@"room_zp_boy_bg"]];
+    
+    if (SafeArea) {
+        [self.luckBgImgView setImage: [UIImage imageNamed:@"room_zp_boy_xbg"]];
+    }
+    
     [self addSubview:self.luckBgImgView];
     
     [self.luckBgImgView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -144,8 +212,6 @@
         make.height.width.equalTo(@18);
     }];
     
-    
-    
     UIView *topLineView = [[UIView alloc] init];
     [self.luckBgImgView addSubview:topLineView];
     [topLineView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -156,8 +222,12 @@
     
     UIView *bottomLineView = [[UIView alloc] init];
     [self.luckBgImgView addSubview:bottomLineView];
+    CGFloat bottomLine = 49.f;
+    if (SafeArea) {
+        bottomLine = 83.f;
+    }
     [bottomLineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.luckBgImgView).with.offset(-48.f);
+        make.bottom.equalTo(self.luckBgImgView).with.offset(-bottomLine);
         make.leading.width.equalTo(self.luckBgImgView);
         make.height.equalTo(@1);
     }];
@@ -273,8 +343,9 @@
     
     [self.meOpen setTitle:@"OPEN" forState:UIControlStateNormal];
     [self.meOpen.titleLabel setFont:[UIFont systemFontOfSize:12.f]];
-    [self.meOpen.titleLabel setTextColor:[UIColor whiteColor]];
-    [self.meOpen addTarget:self action:@selector(prepareLotteryAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.meOpen setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.meOpen setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
+    [self.meOpen addTarget:self action:@selector(meOpenClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.luckView addSubview:self.meOpen];
     
     [self.meOpen mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -290,6 +361,7 @@
     [self.sheOpen.titleLabel setFont:[UIFont systemFontOfSize:12.f]];
     [self.sheOpen setTitle:@"Let Her Open" forState:UIControlStateNormal];
     [self.sheOpen.titleLabel setTextColor:[UIColor whiteColor]];
+    [self.sheOpen addTarget:self action:@selector(maleWaitingViewShow) forControlEvents:UIControlEventTouchUpInside];
     [self.luckView addSubview:self.sheOpen];
     
     [self.sheOpen mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -298,8 +370,68 @@
         make.width.equalTo(self.lotteryCell2).with.offset(-10);
         make.height.equalTo(@32);
     }];
+    
+    if (_isGirlAsk) {
+        [self.meOpen setTitle:@"Send" forState:UIControlStateNormal];
+        [self.meOpen.titleLabel setFont:[UIFont fontWithName:FontNameMedium size:20.f]];
+        [self.meOpen setBackgroundImage:[UIImage imageNamed:@"room_zp_boy_btn_send"] forState:UIControlStateNormal];
+        [self.meOpen setBackgroundImage:[UIImage imageNamed:@"room_zp_boy_btn_send_press"] forState:UIControlStateSelected];
+        [self.meOpen mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.equalTo(@69);
+        }];
+//        [self.meOpen mas_updateConstraints:^(MASConstraintMaker *make) {
+//            make.height.equalTo(self.lotteryCell2).with.offset(-10);
+//        }];
+        self.sheOpen.hidden = YES;
+    } else {
+        [self.meOpen setTitle:@"OPEN" forState:UIControlStateNormal];
+        [self.meOpen.titleLabel setFont:[UIFont fontWithName:FontNameMedium size:12.f]];
+        [self.meOpen setBackgroundImage:[UIImage imageNamed:@"room_zp_boy_btn_open"] forState:UIControlStateNormal];
+        [self.meOpen setBackgroundImage:[UIImage imageNamed:@"room_zp_boy_btn_open_press"] forState:UIControlStateSelected];
+        [self.meOpen mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.equalTo(@32);
+        }];
+        self.sheOpen.hidden =  NO;
+    }
+    
+    
+    
     [self.luckBgImgView layoutIfNeeded];
+    self.waitingView = [[UIImageView alloc] init];
+    [self.waitingView setImage: [UIImage imageNamed:@"room_zp_boy_FAQ_bg"]];
+    self.waitingView.hidden = YES;
+    [self addSubview:self.waitingView];
+    [self.waitingView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(self.luckView).with.offset(-10.f);
+        make.height.equalTo(self.luckView).with.offset(-10.f);
+        make.centerX.equalTo(self.luckView);
+        make.top.equalTo(self.luckView).with.offset(5.f);
+    }];
+    
+    self.waitingProgressView = [[ZJCircleProgressView alloc] init];
+    
+    self.waitingProgressView.trackBackgroundColor = [UIColor whiteColor];
+    self.waitingProgressView.trackColor = [UIColor redColor];
+    self.waitingProgressView.lineWidth = 7.f;
+//    self.waitingProgressView.progressLabel.hidden = YES;
+    self.waitingProgressView.clickWise = YES;
+    [self.waitingProgressView.progressLabel setFont:[UIFont fontWithName:FontNameBoldItalic size:20.f]];
+    [self.waitingProgressView.progressLabel setTextColor:[UIColor whiteColor]];
+
+    [self.waitingView addSubview:self.waitingProgressView];
+    
+    [self.waitingProgressView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.width.mas_equalTo(56.f);
+        make.centerX.equalTo(self.waitingView);
+        make.centerY.equalTo(self.waitingView).with.offset(-25.f);
+
+    }];
+    self.discount = 0.f;
+    self.maxcount = 10.f;
+    
+//    [self getFontNames];
 }
+
 
 
 
@@ -485,6 +617,23 @@
 }
 
 
+- (void)meOpenClicked:(id)sender
+{
+    if (self.isSecondTap) {
+        self.secondDate = self.firstDate;
+        self.firstDate = [NSDate date];
+    } else {
+        self.secondDate = [NSDate date];
+        self.firstDate = [NSDate date];
+        self.isSecondTap = YES;
+    }
+    NSTimeInterval timeInterval = [self.firstDate timeIntervalSinceDate:self.secondDate];
+    if (timeInterval >= 1.5f) {
+        self.isSecondTap = NO;
+    }
+    NSLog(@"%f",timeInterval);
+}
+
 
 //抽奖按钮按下后的准备工作
 - (void)prepareLotteryAction {
@@ -497,20 +646,23 @@
 //    self.currentView.image=[UIImage imageNamed:@"l2"];
     
     
+    
+    
     self.currentView.selected = NO;
     self.currentView = (LotteryCell *)[self.cellArray objectAtIndex:0];
     self.currentView.selected = YES;
-    self.meOpen.enabled = NO;
     
     
+    if (self.isGirlAsk) {
+        self.meOpen.enabled = NO;
+    }
     timer = [NSTimer scheduledTimerWithTimeInterval:intervalTime target:self selector:@selector(startLottery:) userInfo:self.currentView repeats:NO];
-    
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             [InternetRequest loadDataWithUrlString:@"http://old.idongway.com/sohoweb/q?method=store.get&format=json&cat=1"];
             dispatch_sync(dispatch_get_main_queue(), ^{
-                int resultValue = 6;
+                int x = 1 + arc4random() % 8;
+                int resultValue = x;
                 [self endLotteryWithResultValue:resultValue];
                 
             });
@@ -521,7 +673,8 @@
 
 - (void)nextAction {
     
-    int resultValue = 6;
+    int x = 1 + arc4random() % 8;
+    int resultValue = x;
     [self endLotteryWithResultValue:resultValue];
 }
 
@@ -631,6 +784,20 @@
 
 -(void)showAwardView{
     NSLog(@"你中了：%d等奖",self.currentView.tag+1);
+    
+    if (self.isGirlAsk) {
+        [self updateMaleLuckViewUI];
+    }
+    
+    LotteryModel *currentLotteryItem = [self.currentLotteryArray objectAtIndex:self.currentView.tag];
+    
+    NSInteger currentGainLotteryCount = currentLotteryItem.gainLotteryCount.integerValue;
+    currentGainLotteryCount++;
+    
+    currentLotteryItem.gainLotteryCount  =  [NSNumber numberWithInteger:currentGainLotteryCount];
+    
+    [self.currentView refreshLotteryCountUI:currentLotteryItem];
+    
 }
 
 
@@ -673,8 +840,9 @@
 //    }
     
     if (self.ruleView.isHidden == YES) {
-        if (_closeBtnBlock) {
-            _closeBtnBlock();
+        
+        if (_maleCloseBtnBlock) {
+            _maleCloseBtnBlock(self.discount);
         }
     } else {
         [self.closeBtn setBackgroundImage:[UIImage imageNamed:@"room_zp_boy_btn_close"] forState:UIControlStateNormal];
@@ -710,11 +878,7 @@
         self.luckView.hidden = NO;
         self.ruleView.hidden = YES;
     }];
-
-    
-    
 }
-
 
 - (void)ruleBtnClickedForFemale:(id)sender
 {
@@ -736,6 +900,66 @@
     }
 }
 
+
+
+- (void)showDiscountTimer
+{
+    self.discount += 0.05;
+    CGFloat progress = self.discount/self.maxcount;
+    [self.waitingProgressView setProgress:progress];
+    NSInteger remain = self.maxcount - (int)(progress *self.maxcount);
+    self.waitingProgressView.progressLabel.text = [NSString stringWithFormat:@"%lds", remain];
+    if (self.discount > self.maxcount) {
+        [self endDiscount];
+    }
+}
+
+- (void)endDiscount{
+    [self.discountTimer invalidate];
+    self.discountTimer = nil;
+    self.discount = 0.f;
+    [self.waitingProgressView setProgress:0.f];
+    self.waitingView.hidden = YES;
+    
+}
+
+- (void)maleWaitingViewShow
+{
+    self.waitingView.hidden = NO;
+    if (self.discountTimer) {
+        [self.discountTimer invalidate];
+        self.discountTimer = nil;
+    }
+    self.discountTimer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(showDiscountTimer) userInfo:nil repeats:YES];
+    [self showDiscountTimer];
+
+}
+
+- (void)maleWaitingViewClose
+{
+    
+}
+
+
+- (void)initforClose
+{
+    
+}
+
+- (void)getFontNames
+{
+    NSArray *familyNames = [UIFont familyNames];
+    
+    for (NSString *familyName in familyNames) {
+        printf("familyNames = %s\n",[familyName UTF8String]);
+        
+        NSArray *fontNames = [UIFont fontNamesForFamilyName:familyName];
+        
+        for (NSString *fontName in fontNames) {
+            printf("\tfontName = %s\n",[fontName UTF8String]);
+        }
+    }
+}
 
 
 /*

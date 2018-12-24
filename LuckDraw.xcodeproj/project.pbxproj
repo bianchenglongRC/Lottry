@@ -20,6 +20,8 @@
 		13EA66B821CB7440003563CD /* InternetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EA66B721CB7440003563CD /* InternetRequest.m */; };
 		13F0A75521CC8A840040CBCB /* BaseModelObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 13F0A75421CC8A840040CBCB /* BaseModelObject.m */; };
 		13F0A75721CC8E360040CBCB /* favor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 13F0A75621CC8E360040CBCB /* favor.bundle */; };
+		13F789B621D0798400C0CBD4 /* ZJCircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 13F789B421D0798400C0CBD4 /* ZJCircleProgressView.m */; };
+		13F789BB21D0C4D300C0CBD4 /* LotteryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 13F789BA21D0C4D300C0CBD4 /* LotteryModel.m */; };
 		3738363B99863066E2981695 /* libPods-LuckDraw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C55D3DC13A5E886779DC19 /* libPods-LuckDraw.a */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +69,12 @@
 		13F0A75321CC8A840040CBCB /* BaseModelObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseModelObject.h; sourceTree = "<group>"; };
 		13F0A75421CC8A840040CBCB /* BaseModelObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseModelObject.m; sourceTree = "<group>"; };
 		13F0A75621CC8E360040CBCB /* favor.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = favor.bundle; sourceTree = "<group>"; };
+		13F789B421D0798400C0CBD4 /* ZJCircleProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJCircleProgressView.m; sourceTree = "<group>"; };
+		13F789B521D0798400C0CBD4 /* ZJCircleProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJCircleProgressView.h; sourceTree = "<group>"; };
+		13F789B721D0901B00C0CBD4 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		13F789B821D090A700C0CBD4 /* Public.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Public.h; sourceTree = "<group>"; };
+		13F789B921D0C4D300C0CBD4 /* LotteryModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LotteryModel.h; sourceTree = "<group>"; };
+		13F789BA21D0C4D300C0CBD4 /* LotteryModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LotteryModel.m; sourceTree = "<group>"; };
 		651308B5CB0F30B0CC57560F /* Pods-LuckDraw.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LuckDraw.release.xcconfig"; path = "Target Support Files/Pods-LuckDraw/Pods-LuckDraw.release.xcconfig"; sourceTree = "<group>"; };
 		6E8CD984E0B19702AFCF2ED0 /* Pods-LuckDraw.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LuckDraw.debug.xcconfig"; path = "Target Support Files/Pods-LuckDraw/Pods-LuckDraw.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,6 +130,9 @@
 		13B6FCA521C9EB4300681F4A /* LuckDraw */ = {
 			isa = PBXGroup;
 			children = (
+				13F789B721D0901B00C0CBD4 /* PrefixHeader.pch */,
+				13F789B821D090A700C0CBD4 /* Public.h */,
+				13F789B321D0798400C0CBD4 /* ZZCircleProgress */,
 				13EA66B521CB7440003563CD /* InternetRequest */,
 				13B6FCA621C9EB4300681F4A /* AppDelegate.h */,
 				13B6FCA721C9EB4300681F4A /* AppDelegate.m */,
@@ -131,6 +142,8 @@
 				13B6FCFC21CA16C900681F4A /* LuckView.m */,
 				13B6FD0221CA264300681F4A /* LotteryCell.h */,
 				13B6FD0321CA264300681F4A /* LottreyCell.m */,
+				13F789B921D0C4D300C0CBD4 /* LotteryModel.h */,
+				13F789BA21D0C4D300C0CBD4 /* LotteryModel.m */,
 				13B6FCAC21C9EB4300681F4A /* Main.storyboard */,
 				13B6FCAF21C9EB4B00681F4A /* Assets.xcassets */,
 				13B6FCB121C9EB4B00681F4A /* LaunchScreen.storyboard */,
@@ -168,6 +181,15 @@
 				13EA66B721CB7440003563CD /* InternetRequest.m */,
 			);
 			path = InternetRequest;
+			sourceTree = "<group>";
+		};
+		13F789B321D0798400C0CBD4 /* ZZCircleProgress */ = {
+			isa = PBXGroup;
+			children = (
+				13F789B421D0798400C0CBD4 /* ZJCircleProgressView.m */,
+				13F789B521D0798400C0CBD4 /* ZJCircleProgressView.h */,
+			);
+			path = ZZCircleProgress;
 			sourceTree = "<group>";
 		};
 		92F2EF6051F28C5B8AA4E534 /* Frameworks */ = {
@@ -351,6 +373,8 @@
 				13B6FCA821C9EB4300681F4A /* AppDelegate.m in Sources */,
 				13B6FCFD21CA16C900681F4A /* LuckView.m in Sources */,
 				13F0A75521CC8A840040CBCB /* BaseModelObject.m in Sources */,
+				13F789BB21D0C4D300C0CBD4 /* LotteryModel.m in Sources */,
+				13F789B621D0798400C0CBD4 /* ZJCircleProgressView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,6 +548,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3A475SDHSX;
+				GCC_PREFIX_HEADER = "/Users/Blues/APP-iOS/Lottry/LuckDraw/PrefixHeader.pch";
 				INFOPLIST_FILE = LuckDraw/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -542,6 +567,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3A475SDHSX;
+				GCC_PREFIX_HEADER = "/Users/Blues/APP-iOS/Lottry/LuckDraw/PrefixHeader.pch";
 				INFOPLIST_FILE = LuckDraw/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

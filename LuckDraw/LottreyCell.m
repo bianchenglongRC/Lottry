@@ -66,6 +66,7 @@
     [self.lotteryBgImgView addSubview:self.lotteryImgView];
     
     self.lotteryWorthLbl = [[UILabel alloc] init];
+    [self.lotteryWorthLbl setTextAlignment:NSTextAlignmentCenter];
     [self.lotteryBgImgView addSubview:self.lotteryWorthLbl];
     
     self.lotteryCountBgView = [[UIImageView alloc] init];
@@ -73,8 +74,9 @@
     [self.lotteryBgImgView addSubview:self.lotteryCountBgView];
 
     self.lotteryCountLbl = [[UILabel alloc] init];
-    [self.lotteryCountLbl setFont:[UIFont fontWithName:@"Roboto-Bold" size:11.f]];
+    [self.lotteryCountLbl setFont:[UIFont fontWithName:FontNameNormalBold size:10.f]];
     [self.lotteryCountLbl setTextColor:[UIColor whiteColor]];
+    [self.lotteryCountLbl adjustsFontSizeToFitWidth];
     [self.lotteryCountBgView addSubview:self.lotteryCountLbl];
 
     
@@ -113,10 +115,9 @@
     }];
     
     [self.lotteryImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.lotteryBgImgView).offset(29);
-        make.top.equalTo(self.lotteryBgImgView).offset(9);
-        make.trailing.equalTo(self.lotteryBgImgView).offset(-29);
-        make.bottom.equalTo(self.lotteryWorthLbl.mas_top).with.offset(-10.f);
+        make.width.height.equalTo(@49);
+        make.centerX.equalTo(self.lotteryBgImgView);
+        make.bottom.equalTo(self.lotteryWorthLbl.mas_top).with.offset(0.f);
     }];
     
     [self.lotteryCountBgView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -128,7 +129,7 @@
     [self.lotteryCountLbl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.centerY.equalTo(self.lotteryCountBgView);
         make.height.equalTo(@12);
-        make.width.equalTo(@11);
+        make.width.equalTo(@15);
     }];
 
 }
@@ -167,14 +168,28 @@
     [self.lotteryCountLbl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.centerY.equalTo(self.lotteryCountBgView);
         make.height.equalTo(@12);
-        make.width.equalTo(@11);
+        make.width.equalTo(@15);
     }];
 }
 
 
-- (void)setLotteryInfo:(NSDictionary *)lotteryInfo
+- (void)setLotteryInfo:(LotteryModel *)lotteryInfo
 {
+    [self.lotteryImgView sd_setImageWithURL:[NSURL URLWithString:lotteryInfo.lotteryImage] placeholderImage:nil];
+    [self.lotteryWorthLbl setText:[NSString stringWithFormat:@"%@",lotteryInfo.gold]];
+    
+    if (!lotteryInfo.gainLotteryCount || lotteryInfo.gainLotteryCount.integerValue == 0) {
+        self.lotteryCountBgView.hidden = YES;
+    }
+    
+}
 
+- (void)refreshLotteryCountUI:(LotteryModel *)lotteryInfo
+{
+    if (lotteryInfo.gainLotteryCount && lotteryInfo.gainLotteryCount.integerValue != 0) {
+        self.lotteryCountBgView.hidden = NO;
+        [self.lotteryCountLbl setText:[NSString stringWithFormat:@"+%@",lotteryInfo.gainLotteryCount]];
+    }
 }
 
 - (void)setSelected:(BOOL)selected
