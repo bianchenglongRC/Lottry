@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		133CAC8C21D1F96F0073C7B5 /* AwardLotteryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 133CAC8B21D1F96F0073C7B5 /* AwardLotteryView.m */; };
 		13B6FCA821C9EB4300681F4A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B6FCA721C9EB4300681F4A /* AppDelegate.m */; };
 		13B6FCAB21C9EB4300681F4A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B6FCAA21C9EB4300681F4A /* ViewController.m */; };
 		13B6FCAE21C9EB4300681F4A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13B6FCAC21C9EB4300681F4A /* Main.storyboard */; };
@@ -44,6 +45,8 @@
 
 /* Begin PBXFileReference section */
 		01C55D3DC13A5E886779DC19 /* libPods-LuckDraw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LuckDraw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		133CAC8A21D1F96F0073C7B5 /* AwardLotteryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AwardLotteryView.h; sourceTree = "<group>"; };
+		133CAC8B21D1F96F0073C7B5 /* AwardLotteryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AwardLotteryView.m; sourceTree = "<group>"; };
 		13B6FCA321C9EB4300681F4A /* LuckDraw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LuckDraw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B6FCA621C9EB4300681F4A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		13B6FCA721C9EB4300681F4A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -144,6 +147,8 @@
 				13B6FD0321CA264300681F4A /* LottreyCell.m */,
 				13F789B921D0C4D300C0CBD4 /* LotteryModel.h */,
 				13F789BA21D0C4D300C0CBD4 /* LotteryModel.m */,
+				133CAC8A21D1F96F0073C7B5 /* AwardLotteryView.h */,
+				133CAC8B21D1F96F0073C7B5 /* AwardLotteryView.m */,
 				13B6FCAC21C9EB4300681F4A /* Main.storyboard */,
 				13B6FCAF21C9EB4B00681F4A /* Assets.xcassets */,
 				13B6FCB121C9EB4B00681F4A /* LaunchScreen.storyboard */,
@@ -371,6 +376,7 @@
 				13EA66B821CB7440003563CD /* InternetRequest.m in Sources */,
 				13B6FD0421CA264300681F4A /* LottreyCell.m in Sources */,
 				13B6FCA821C9EB4300681F4A /* AppDelegate.m in Sources */,
+				133CAC8C21D1F96F0073C7B5 /* AwardLotteryView.m in Sources */,
 				13B6FCFD21CA16C900681F4A /* LuckView.m in Sources */,
 				13F0A75521CC8A840040CBCB /* BaseModelObject.m in Sources */,
 				13F789BB21D0C4D300C0CBD4 /* LotteryModel.m in Sources */,

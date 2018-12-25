@@ -23,7 +23,7 @@ typedef NS_ENUM(NSUInteger, LuckViewType) {
 
 @property (nonatomic, copy) void(^maleCloseBtnBlock)(CGFloat progress);
 
-
+@property (nonatomic, copy) void(^wantPlayBtnBlock)(void);
 
 @property (nonatomic, assign) LuckViewType luckViewType;
 

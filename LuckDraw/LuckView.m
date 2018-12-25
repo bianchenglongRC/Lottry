@@ -7,7 +7,6 @@
 //
 
 #import "LuckView.h"
-#import "Masonry.h"
 #import "LotteryCell.h"
 #import "InternetRequest/InternetRequest.h"
 #import "LotteryModel.h"
@@ -58,8 +57,10 @@
 @property (nonatomic, strong) NSMutableArray *currentLotteryArray;
 
 @property (nonatomic) BOOL isSecondTap;
+@property (nonatomic) BOOL isSerial;
 @property (nonatomic, strong) NSDate *firstDate;
 @property (nonatomic, strong) NSDate *secondDate;
+@property (nonatomic) NSInteger awardLotteryResult;
 
 
 
@@ -605,7 +606,8 @@
         [self.meOpen setTitle:@"OPEN" forState:UIControlStateNormal];
     [self.meOpen.titleLabel setFont:[UIFont systemFontOfSize:16.f]];
     [self.meOpen.titleLabel setTextColor:[UIColor whiteColor]];
-    [self.meOpen addTarget:self action:@selector(prepareLotteryAction) forControlEvents:UIControlEventTouchUpInside];
+//    [self.meOpen addTarget:self action:@selector(prepareLotteryAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.meOpen addTarget:self action:@selector(wantToPlayMethod:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.meOpen];
     [self.meOpen mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self);
@@ -623,51 +625,82 @@
         self.secondDate = self.firstDate;
         self.firstDate = [NSDate date];
     } else {
-        self.secondDate = [NSDate date];
         self.firstDate = [NSDate date];
         self.isSecondTap = YES;
     }
     NSTimeInterval timeInterval = [self.firstDate timeIntervalSinceDate:self.secondDate];
-    if (timeInterval >= 1.5f) {
-        self.isSecondTap = NO;
+    
+    if (timeInterval < 1.5) {
+        self.isSerial = YES;
+    } else {
+        self.isSerial = NO;
     }
+    
+    self.isSerial = YES;
     NSLog(@"%f",timeInterval);
+    [self prepareLotteryAction];
 }
 
 
 //抽奖按钮按下后的准备工作
 - (void)prepareLotteryAction {
-    intervalTime = 0.7;//起始的变换时间差（速度）
-//    self.currentView.label.textColor = [UIColor colorWithRed:0.74 green:0.46 blue:0.07 alpha:1];
-//    self.currentView.image=[UIImage imageNamed:@"l3"];
-//
-//    self.currentView = [array objectAtIndex:0];
-//    self.currentView.label.textColor = [UIColor whiteColor];
-//    self.currentView.image=[UIImage imageNamed:@"l2"];
-    
-    
-    
-    
-    self.currentView.selected = NO;
-    self.currentView = (LotteryCell *)[self.cellArray objectAtIndex:0];
-    self.currentView.selected = YES;
-    
     
     if (self.isGirlAsk) {
         self.meOpen.enabled = NO;
     }
-    timer = [NSTimer scheduledTimerWithTimeInterval:intervalTime target:self selector:@selector(startLottery:) userInfo:self.currentView repeats:NO];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            [InternetRequest loadDataWithUrlString:@"http://old.idongway.com/sohoweb/q?method=store.get&format=json&cat=1"];
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                int x = 1 + arc4random() % 8;
-                int resultValue = x;
-                [self endLotteryWithResultValue:resultValue];
-                
+    
+    if (self.isSerial) {
+        int x = 1 + arc4random() % 8;
+        int resultValue = x;
+        self.awardLotteryResult = resultValue;
+        [self showSerialAward];
+        
+//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//            dispatch_sync(dispatch_get_main_queue(), ^{
+//                int x = 1 + arc4random() % 8;
+//                int resultValue = x;
+//                [self endLotteryWithResultValue:resultValue];
+//            });
+//        });
+    } else {
+        intervalTime = 0.7;//起始的变换时间差（速度）
+        //    self.currentView.label.textColor = [UIColor colorWithRed:0.74 green:0.46 blue:0.07 alpha:1];
+        //    self.currentView.image=[UIImage imageNamed:@"l3"];
+        //
+        //    self.currentView = [array objectAtIndex:0];
+        //    self.currentView.label.textColor = [UIColor whiteColor];
+        //    self.currentView.image=[UIImage imageNamed:@"l2"];
+        
+        self.currentView.selected = NO;
+        self.currentView = (LotteryCell *)[self.cellArray objectAtIndex:0];
+        self.currentView.selected = YES;
+
+        timer = [NSTimer scheduledTimerWithTimeInterval:intervalTime target:self selector:@selector(startLottery:) userInfo:self.currentView repeats:NO];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                //            [InternetRequest loadDataWithUrlString:@"http://old.idongway.com/sohoweb/q?method=store.get&format=json&cat=1"];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    int x = 1 + arc4random() % 8;
+                    int resultValue = x;
+                    [self endLotteryWithResultValue:resultValue];
+                });
             });
         });
-    });
+
+    }
+    
+    
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+////            [InternetRequest loadDataWithUrlString:@"http://old.idongway.com/sohoweb/q?method=store.get&format=json&cat=1"];
+//            dispatch_sync(dispatch_get_main_queue(), ^{
+//                int x = 1 + arc4random() % 8;
+//                int resultValue = x;
+//                [self endLotteryWithResultValue:resultValue];
+//
+//            });
+//        });
+//    });
 }
 
 
@@ -693,10 +726,7 @@
     }else{
         self.currentView = [self.cellArray objectAtIndex:index+1];
     }
-    
     [self moveCurrentView:self.currentView inArray:self.cellArray];
-    
-    
     if (intervalTime>0.1) {
         intervalTime = intervalTime - 0.1;
     }
@@ -718,7 +748,7 @@
 }
 
 //减速至停止
--(void)moveToStopWithAccelerate{
+-(void)moveToStopWithAccelerate {
     
     static float timeTotal = 0;
     if (timeTotal<endTimerTotal) {
@@ -728,11 +758,13 @@
         self.currentView = (LotteryCell *)[self nextViewByCurrentView:self.currentView andArray:self.cellArray];
         [self moveCurrentView:self.currentView inArray:self.cellArray];
         timer = [NSTimer scheduledTimerWithTimeInterval:intervalTime target:self selector:@selector(moveToStopWithAccelerate) userInfo:nil repeats:NO];
+        NSLog(@"-One-");
     }else{
         [timer invalidate];
         timeTotal = 0;
         [self showAwardView];
         self.meOpen.enabled = YES;
+        NSLog(@"-Two-");
     }
     
 }
@@ -798,6 +830,21 @@
     
     [self.currentView refreshLotteryCountUI:currentLotteryItem];
     
+}
+
+- (void)showSerialAward {
+    
+    if (self.isGirlAsk) {
+        [self updateMaleLuckViewUI];
+        self.meOpen.enabled = YES;
+    }
+    NSInteger currentViewTag = self.awardLotteryResult - 1;
+    LotteryCell *serialAwardView = [self.cellArray objectAtIndex:currentViewTag];
+    LotteryModel *currentLotteryItem = [self.currentLotteryArray objectAtIndex:currentViewTag];
+    NSInteger currentGainLotteryCount = currentLotteryItem.gainLotteryCount.integerValue;
+    currentGainLotteryCount++;
+    currentLotteryItem.gainLotteryCount  =  [NSNumber numberWithInteger:currentGainLotteryCount];
+    [serialAwardView refreshLotteryCountUI:currentLotteryItem];
 }
 
 
@@ -897,6 +944,13 @@
         [self.closeBtn setBackgroundImage:[UIImage imageNamed:@"room_zp_girl_btn_close"] forState:UIControlStateNormal];
         self.ruleView.hidden = YES;
         self.luckView.hidden = NO;
+    }
+}
+
+- (void)wantToPlayMethod:(id)sender
+{
+    if (_wantPlayBtnBlock) {
+        _wantPlayBtnBlock();
     }
 }
 

@@ -2,10 +2,11 @@
 #import "ViewController.h"
 #import "LuckView.h"
 #import "Masonry.h"
+#import "AwardLotteryView.h"
 
 @interface ViewController ()
 {
-    LuckView *luckView_male;
+    
 }
 
 @property (nonatomic, strong) UIView *waitingView;
@@ -17,6 +18,11 @@
 @property (nonatomic) CGFloat discount;
 @property (nonatomic) NSInteger maxcount;
 
+@property (nonatomic, strong) AwardLotteryView *awardLotteryView;
+@property (nonatomic, strong) LuckView *luckView_male;
+@property (nonatomic, strong) LuckView *luckView_female;
+
+
 @end
 
 @implementation ViewController
@@ -27,29 +33,31 @@
     float allWidth = [[UIScreen mainScreen] bounds].size.width;
     float allHeight = [[UIScreen mainScreen] bounds].size.height;
 
-    luckView_male = [[LuckView alloc] initWithFrame:CGRectMake(0, allHeight-339, allWidth, 339)];
+    self.luckView_male = [[LuckView alloc] initWithFrame:CGRectMake(0, allHeight-339, allWidth, 339)];
     if (SafeArea) {
-        luckView_male.frame = CGRectMake(0, allHeight-374, allWidth, 374);
+        self.luckView_male.frame = CGRectMake(0, allHeight-374, allWidth, 374);
     }
-    luckView_male.luckViewType = LuckView_Male;
-    luckView_male.isGirlAsk = YES;
-    luckView_male.hidden = YES;
-    __weak LuckView *weak_luckView_male = luckView_male;
+    self.luckView_male.luckViewType = LuckView_Male;
+    self.luckView_male.isGirlAsk = YES;
+    self.luckView_male.hidden = YES;
     __weak ViewController *weakSelf = self;
-    [luckView_male setMaleCloseBtnBlock:^(CGFloat progress) {
+    [self.luckView_male setMaleCloseBtnBlock:^(CGFloat progress) {
         weakSelf.discount = progress;
-        weak_luckView_male.hidden = YES;
+        weakSelf.luckView_male.hidden = YES;
         [weakSelf maleWaitingProgressViewShow];
     }];
-    [self.view addSubview:luckView_male];
-    LuckView *luckView_female = [[LuckView alloc] initWithFrame:CGRectMake((allWidth-330)/2, (allHeight-387)/2, 330, 387)];
-    __weak LuckView *weak_luckView_female = luckView_female;
-    [luckView_female setCloseBtnBlock:^{
-        weak_luckView_female.hidden = YES;
+    [self.view addSubview:self.luckView_male];
+    self.luckView_female = [[LuckView alloc] initWithFrame:CGRectMake((allWidth-330)/2, (allHeight-387)/2, 330, 387)];
+    [self.luckView_female setCloseBtnBlock:^{
+        weakSelf.luckView_female.hidden = YES;
     }];
-    luckView_female.luckViewType = LuckView_Female;
-    luckView_female.hidden = YES;
-    [self.view addSubview:luckView_female];
+    [self.luckView_female setWantPlayBtnBlock:^{
+        weakSelf.awardLotteryView.hidden = NO;
+        weakSelf.luckView_female.hidden = YES;
+    }];
+    self.luckView_female.luckViewType = LuckView_Female;
+    self.luckView_female.hidden = YES;
+    [self.view addSubview:self.luckView_female];
 
     
     self.luckIcon = [[UIImageView alloc] init];
@@ -94,14 +102,45 @@
         make.leading.top.width.height.equalTo(self.waitingView);
     }];
     self.maxcount = 10.f;
+    
+    [self initAwardLotteryView];
 }
 
 - (void)tap:(UIGestureRecognizer *)sender
 {
-    luckView_male.hidden = NO;
+//    luckView_male.hidden = NO;
+    
+    self.luckView_female.hidden = NO;
 }
 
-
+- (void)initAwardLotteryView
+{
+    __weak ViewController *weakSelf = self;
+    self.awardLotteryView = [[AwardLotteryView alloc] init];
+    [self.awardLotteryView setCloseBtnBlock:^{
+        weakSelf.awardLotteryView.hidden = YES;
+    }];
+    
+    [self.awardLotteryView setThanksBtnBlock:^{
+        
+    }];
+    
+    [self.awardLotteryView setGoOnPlayBtnBlock:^{
+        
+    }];
+    
+    [self.view addSubview:self.awardLotteryView];
+    self.awardLotteryView.hidden = YES;
+    float allWidth = [[UIScreen mainScreen] bounds].size.width;
+    float allHeight = [[UIScreen mainScreen] bounds].size.height;
+    float top = (allHeight - 28 - 300 - 24 - 40)/2;
+    [self.awardLotteryView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(@330);
+        make.height.equalTo(@392);
+        make.top.mas_equalTo(top);
+        make.center.equalTo(self.view);
+    }];
+}
 
 - (void)LuckAnimation
 {
